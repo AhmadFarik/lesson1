@@ -4,210 +4,247 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>طول القوس ومساحة القطاع الدائري</title>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f2f7f7;--card:#fff;--ink:#10262b;--mute:#4d6a70;--line:#cfe0e2;--teal:#0f766e;--tealsoft:#d5efec;--amber:#f0a92e;--ambersoft:#fdeccb;--ok:#15803d;
+:root{--bg:#f6f2ff;--card:#fff;--ink:#1e1748;--mute:#5e5883;--line:#ddd5f5;--side:#2b1b5a;--vio:#6d3fe0;--viosoft:#ece5ff;--org:#ff8a3d;--orgsoft:#ffe7d3;--ok:#0f9d7a;--bad:#d6454f;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1a1d;--card:#15272b;--ink:#e6f1f2;--mute:#9db8bc;--line:#264247;--teal:#3cc4b6;--tealsoft:#123c3a;--amber:#f5b94a;--ambersoft:#3d2f12;--ok:#4ade80}}
-:root[data-theme="dark"]{--bg:#0d1a1d;--card:#15272b;--ink:#e6f1f2;--mute:#9db8bc;--line:#264247;--teal:#3cc4b6;--tealsoft:#123c3a;--amber:#f5b94a;--ambersoft:#3d2f12;--ok:#4ade80}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#120d2b;--card:#1d1541;--ink:#efeaff;--mute:#b3aad9;--line:#33285f;--side:#0b0720;--vio:#a78bfa;--viosoft:#2a1f5a;--org:#ffa15c;--orgsoft:#43291a;--ok:#38d9b0;--bad:#ff7a84}}
+:root[data-theme="dark"]{--bg:#120d2b;--card:#1d1541;--ink:#efeaff;--mute:#b3aad9;--line:#33285f;--side:#0b0720;--vio:#a78bfa;--viosoft:#2a1f5a;--org:#ffa15c;--orgsoft:#43291a;--ok:#38d9b0;--bad:#ff7a84}
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Tajawal,"Segoe UI",Tahoma,sans-serif;font-size:18px;line-height:1.6}
-body{min-height:100vh;display:flex;flex-direction:column}
-header{display:flex;align-items:center;gap:14px;padding:12px 24px;border-bottom:1px solid var(--line);background:var(--card)}
-header b{font-weight:800;font-size:17px}
-.steps{display:flex;gap:6px;flex:1;flex-wrap:wrap}
-.steps button{border:1px solid var(--line);background:var(--bg);color:var(--mute);border-radius:99px;padding:3px 12px;font:inherit;font-size:14px;cursor:pointer}
-.steps button.on{background:var(--teal);border-color:var(--teal);color:#fff;font-weight:700}
-.steps button i{font-style:normal;opacity:.75;margin-inline-start:5px}
-main{flex:1;width:100%;max-width:1100px;margin:0 auto;padding:26px 22px}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Cairo,"Segoe UI",Tahoma,sans-serif;font-size:18px;line-height:1.65}
+body{min-height:100vh;display:grid;grid-template-columns:240px 1fr}
+aside{background:var(--side);color:#fff;padding:22px 16px;display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh}
+aside h4{margin:0 0 14px;font-size:16px;font-weight:700;opacity:.85;line-height:1.4}
+.steps{display:flex;flex-direction:column;gap:4px;flex:1}
+.steps button{display:flex;align-items:center;gap:10px;background:none;border:0;color:#d9d0ff;font:inherit;font-size:16px;padding:8px 10px;border-radius:10px;cursor:pointer;text-align:start}
+.steps button b{flex:none;width:12px;height:12px;border-radius:50%;border:2px solid #9b86e6}
+.steps button i{margin-inline-start:auto;font-style:normal;font-size:13px;opacity:.7}
+.steps button.on{background:#ffffff1f;color:#fff;font-weight:700}
+.steps button.on b{background:var(--org);border-color:var(--org)}
+.steps button.past b{background:#9b86e6}
+#clock{font-variant-numeric:tabular-nums;font-size:26px;font-weight:700;direction:ltr;text-align:center;padding-top:10px;border-top:1px solid #ffffff2a}
+.cwrap{display:flex;flex-direction:column;min-height:100vh}
+main{flex:1;width:100%;max-width:1000px;margin:0 auto;padding:30px 26px}
 section{display:none}section.on{display:block}
-h1{font-size:clamp(34px,6vw,60px);line-height:1.15;margin:0 0 14px;font-weight:800}
-h2{font-size:clamp(26px,4vw,38px);margin:0 0 6px;font-weight:800}
-.sub{color:var(--mute);margin:0 0 20px;max-width:62ch}
+h1{font-size:clamp(34px,5.5vw,58px);line-height:1.2;margin:0 0 14px;font-weight:800}
+h2{font-size:clamp(26px,3.6vw,36px);margin:0 0 6px;font-weight:800}
+h3{margin:0 0 6px;font-size:20px}
+.sub{color:var(--mute);margin:0 0 20px;max-width:64ch}
+.tag{display:inline-block;background:var(--orgsoft);border-radius:99px;padding:1px 14px;font-weight:700;font-size:15px;margin-bottom:10px}
 .grid{display:grid;gap:16px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}
-@media(max-width:820px){.g2,.g3{grid-template-columns:1fr}}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
-.card h3{margin:0 0 6px;font-size:20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 20px}
+.life{background:var(--orgsoft);border-radius:14px;padding:10px 14px;margin-top:12px;font-size:16px}
+.life b{color:var(--ink)}
 .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:center}
-@media(max-width:820px){.hero{grid-template-columns:1fr}}
-.tag{display:inline-block;background:var(--ambersoft);color:var(--ink);border-radius:8px;padding:2px 12px;font-weight:700;font-size:15px;margin-bottom:12px}
-ul.check{list-style:none;margin:0;padding:0;display:grid;gap:10px}
-ul.check li{display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;user-select:none}
-ul.check li::before{content:"";flex:none;width:22px;height:22px;margin-top:3px;border:2px solid var(--teal);border-radius:6px}
-ul.check li.done{background:var(--tealsoft)}
-ul.check li.done::before{background:var(--teal);box-shadow:inset 0 0 0 4px var(--tealsoft)}
-.formula{direction:ltr;text-align:center;font-size:26px;font-weight:700;background:var(--tealsoft);border-radius:12px;padding:12px 8px;margin:12px 0;font-family:"Times New Roman",serif}
-.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.15;margin:0 4px}
-.frac span:first-child{border-bottom:2px solid currentColor;padding:0 4px}
-.lab{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
-.lab svg{flex:0 0 300px;max-width:100%;height:auto}
-.ctrl{flex:1;min-width:250px}
-.ctrl label{display:flex;justify-content:space-between;font-weight:700;margin-top:10px}
-input[type=range]{width:100%;accent-color:var(--teal)}
-.bar{height:26px;border-radius:8px;background:var(--tealsoft);overflow:hidden;direction:ltr;margin:8px 0 2px;border:1px solid var(--line)}
-.bar div{height:100%;background:var(--amber)}
-.out{font-size:22px;font-weight:800;color:var(--teal);direction:ltr;text-align:center;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px;margin-top:10px}
+.btn{font:inherit;font-weight:700;border:2px solid var(--vio);background:var(--card);color:var(--ink);border-radius:12px;padding:7px 18px;cursor:pointer}
+.btn.pri{background:var(--vio);color:#fff}.btn:disabled{opacity:.35;cursor:default}
+.obj{cursor:pointer;position:relative;padding-inline-start:52px}
+.obj::before{content:"";position:absolute;inset-inline-start:16px;top:20px;width:24px;height:24px;border:2px solid var(--vio);border-radius:50%}
+.obj.done{background:var(--viosoft)}.obj.done::before{background:var(--vio);box-shadow:inset 0 0 0 4px var(--viosoft)}
+.obj .life{display:none}.obj.done .life{display:block}
+.formula{text-align:center;background:var(--viosoft);border-radius:14px;padding:12px 8px;margin:12px 0;overflow-x:auto}
+math{direction:ltr;font-family:"STIX Two Math","Cambria Math","Latin Modern Math",serif;font-size:1.2em}
+.formula math{font-size:1.7em}
+.lab{display:flex;gap:24px;align-items:center;flex-wrap:wrap}
+.lab svg{flex:0 0 300px;max-width:100%;height:auto;direction:ltr}
+.ctrl{flex:1;min-width:260px}
+.ctrl label{display:flex;justify-content:space-between;font-weight:700;margin-top:8px}
+input[type=range]{width:100%;accent-color:var(--vio)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.chip{font:inherit;font-size:15px;border:1px solid var(--vio);background:var(--card);color:var(--ink);border-radius:99px;padding:2px 14px;cursor:pointer}
+.chip.hot{background:var(--org);border-color:var(--org);color:#1e1748;font-weight:700}
+.bar{height:24px;border-radius:8px;background:var(--viosoft);overflow:hidden;direction:ltr;margin:6px 0 2px}
+.bar div{height:100%;background:var(--org)}
+.out{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px;text-align:center;margin-top:10px;overflow-x:auto}
+.out math{font-size:1.3em;color:var(--vio)}
 .note{font-size:15px;color:var(--mute)}
 .tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
-.tabs button,.btn{font:inherit;font-weight:700;border:2px solid var(--teal);background:var(--card);color:var(--ink);border-radius:12px;padding:8px 18px;cursor:pointer}
-.tabs button.on,.btn.pri{background:var(--teal);color:#fff}
-.sol{display:none;margin-top:12px;background:var(--tealsoft);border-radius:10px;padding:12px 14px}
-.sol.on{display:block}
-nav{display:flex;justify-content:space-between;align-items:center;padding:12px 24px;border-top:1px solid var(--line);background:var(--card)}
-nav .btn:disabled{opacity:.35;cursor:default}
-#clock{font-variant-numeric:tabular-nums;font-weight:700;color:var(--mute)}
-button:focus-visible,li:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.tabs .btn.on{background:var(--vio);color:#fff}
+.row{display:flex;gap:10px;align-items:center;margin:10px 0;flex-wrap:wrap}
+input.ans{font:inherit;width:120px;padding:5px 10px;border:2px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);direction:ltr;text-align:center}
+.fb{font-weight:700}.fb.ok{color:var(--ok)}.fb.bad{color:var(--bad)}
+.hint{background:var(--orgsoft);border-radius:12px;padding:8px 14px;margin-top:8px;font-size:17px}
+.step{background:var(--viosoft);border-radius:12px;padding:6px 14px;margin-top:8px;overflow-x:auto}
+.acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+nav{display:flex;justify-content:space-between;padding:12px 26px;border-top:1px solid var(--line);background:var(--card)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--org);outline-offset:2px}
+@media(max-width:860px){body{grid-template-columns:1fr}aside{position:static;height:auto;flex-direction:row;align-items:center;overflow-x:auto;padding:10px}aside h4,#clock{display:none}.steps{flex-direction:row}.steps button{white-space:nowrap}.g2,.g3,.hero{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<header><b>طول القوس ومساحة القطاع</b><div class="steps" id="steps"></div></header>
-<main>
+<aside><h4>طول القوس ومساحة القطاع</h4><div class="steps" id="steps"></div><div id="clock">00:00</div></aside>
+<div class="cwrap"><main>
 
 <section class="on">
  <div class="hero"><div>
-  <span class="tag">الصف العاشر الأساسي · درس مصغر (10–15 دقيقة)</span>
+  <span class="tag">الصف العاشر الأساسي · درس مصغر 10–15 دقيقة</span>
   <h1>طول القوس ومساحة القطاع الدائري</h1>
-  <p class="sub">نستكشف المفاهيم الهندسية بطرق مرنة وتفاعلية تناسب جميع المتعلمين: نشاهد، نجرّب، ثم نعبّر بطريقتنا.</p>
+  <p class="sub">نشاهد، نجرّب، ثم نعبّر عن الفهم بطريقتنا. وفي كل خطوة مثال من حياتنا اليومية.</p>
   <button class="btn pri" onclick="go(1)">ابدأ الدرس</button>
- </div><svg viewBox="0 0 260 260" id="heroSvg"></svg></div>
+ </div><svg viewBox="0 0 260 260" id="heroSvg" style="direction:ltr"></svg></div>
 </section>
 
 <section>
- <h2>بطاقة الدرس والأهداف المرنة</h2>
- <p class="sub">اضغط على الناتج عندما نحققه معاً خلال الحصة.</p>
- <div class="grid g2">
-  <div><h3>المخرجات التعليمية المتوقعة</h3>
-   <ul class="check">
-    <li tabindex="0">توفير نمذجة بصرية ومجسمة للقطاع.</li>
-    <li tabindex="0">استنتاج قانون طول القوس في الدائرة.</li>
-    <li tabindex="0">حساب مساحة القطاع الدائري بدقة.</li>
-    <li tabindex="0">تطبيق القوانين على مشكلات حياتية هندسية.</li>
-   </ul></div>
-  <div><h3>مرونة إطار UDL</h3>
-   <ul class="check">
-    <li tabindex="0">حرية التعبير بالرسم أو بالحساب الجبري.</li>
-    <li tabindex="0">مستويات تحدٍّ تناسب الفروق الفردية.</li>
-   </ul></div>
- </div>
+ <h2>النتاجات التعليمية</h2>
+ <p class="sub">في نهاية الدرس يُتوقع أن يكون الطالب قادراً على أن: (اضغط على كل نتاج عند تحقيقه لتظهر فكرته في الحياة اليومية).</p>
+ <div class="grid g2" id="objs"></div>
 </section>
 
 <section>
- <span class="tag">دقيقتان</span>
- <h2>التهيئة والتحفيز</h2>
- <p class="sub">أين نرى الأقواس والقطاعات حولنا؟ اضغط على كل بطاقة.</p>
+ <span class="tag">التهيئة · دقيقتان</span>
+ <h2>أين نرى الأقواس والقطاعات؟</h2>
+ <p class="sub">اضغط على كل بطاقة لتقرأ الفكرة.</p>
  <div class="grid g3" id="hook"></div>
 </section>
 
 <section>
- <span class="tag">4 دقائق</span>
- <h2>استكشاف طول القوس</h2>
- <p class="sub">القوس جزء من محيط الدائرة. حرّك الزاوية وانظر كيف يتغير طول القوس فوراً.</p>
+ <span class="tag">استكشاف · 4 دقائق</span>
+ <h2>طول القوس</h2>
+ <p class="sub">القوس جزء من محيط الدائرة. حرّك الزاوية وشاهد الرمز <b>l</b> يتغير فوراً.</p>
  <div class="lab" id="labArc"></div>
- <div class="grid g2" style="margin-top:16px">
-  <div class="card"><h3>الفكرة الأساسية</h3>
-   نسبة طول القوس إلى المحيط تساوي نسبة زاويته المركزية إلى 360°.
-   <div class="formula">s = <span class="frac"><span>θ</span><span>360°</span></span> × 2πr</div></div>
-  <div class="card"><h3>دعم المتعلمين</h3>
-   <p style="margin:0 0 6px">مسرد مرئي للمصطلحات:</p>
-   <b style="color:var(--teal)">نصف القطر r</b> · <b style="color:var(--amber)">الزاوية المركزية θ</b> · <b>المحيط 2πr</b><br>
-   <span class="note">يمكن تنفيذ النشاط نفسه على GeoGebra.</span></div>
+ <div class="grid g2" style="margin-top:18px">
+  <div class="card"><h3>الفكرة الأساسية</h3>نسبة طول القوس إلى المحيط تساوي نسبة زاويته المركزية إلى 360°.
+   <div class="formula" data-t="l = {θ/360°} × 2πr"></div>
+   <div class="life"><b>مثال حياتي:</b> عدّاء يقطع في مسار دائري نصف قطره 30 م قوساً زاويته 60°، فيقطع l = 10π ≈ 31.4 م.</div></div>
+  <div class="card"><h3>دعم المتعلمين: مسرد مرئي</h3>
+   <p style="margin:0"><b style="color:var(--vio)">r</b> نصف القطر: من المركز إلى المحيط.<br><b style="color:var(--org)">θ</b> الزاوية المركزية: رأسها المركز.<br><b>2πr</b> المحيط الكامل.<br><b style="color:var(--org)">l</b> طول القوس: جزء من المحيط.</p>
+   <p class="note">يمكن تنفيذ النشاط نفسه على GeoGebra.</p></div>
  </div>
 </section>
 
 <section>
- <span class="tag">4 دقائق</span>
- <h2>استكشاف مساحة القطاع الدائري</h2>
+ <span class="tag">استكشاف · 4 دقائق</span>
+ <h2>مساحة القطاع الدائري</h2>
  <p class="sub">مساحة القطاع جزء من مساحة الدائرة، وتعتمد على الزاوية المركزية المقابلة له.</p>
  <div class="lab" id="labSec"></div>
- <div class="grid g2" style="margin-top:16px">
+ <div class="grid g2" style="margin-top:18px">
   <div class="card"><h3>القاعدة</h3>
-   <div class="formula">A = <span class="frac"><span>θ</span><span>360°</span></span> × πr²</div></div>
+   <div class="formula" data-t="A = {θ/360°} × π r^2"></div>
+   <div class="life"><b>مثال حياتي:</b> رشاش حديقة مداه 6 م يدور 120°، فيروي A = 12π ≈ 37.7 م² من العشب.</div></div>
   <div class="card"><h3>تلميح للفهم العميق</h3>
-   يمكن حساب المساحة مباشرة بدلالة طول القوس s ونصف القطر r:
-   <div class="formula">A = ½ · s · r</div>
-   <span class="note">جرّب: القيمتان في المختبر أعلاه متطابقتان دائماً.</span></div>
+   نحسب المساحة مباشرة بدلالة طول القوس l ونصف القطر r:
+   <div class="formula" data-t="A = {1/2} × l × r"></div>
+   <p class="note">جرّب في المختبر: القيمتان متطابقتان دائماً.</p></div>
  </div>
 </section>
 
 <section>
- <span class="tag">تطبيق عملي · خيارات الطلاب</span>
+ <span class="tag">التطبيق العملي · 3 دقائق</span>
  <h2>اختر مستوى التحدي</h2>
- <p class="sub">اختر المستوى أو طريقة التعبير التي تناسبك لتثبت فهمك.</p>
+ <p class="sub">اختر المستوى الذي يناسبك. استعن بالتلميحات عند الحاجة، ثم تحقق من إجابتك.</p>
  <div class="tabs" id="tabs"></div>
  <div class="card" id="task"></div>
 </section>
 
 <section>
- <span class="tag">خاتمة الدرس والتقييم الختامي المرن</span>
+ <span class="tag">الخاتمة والتقييم الختامي المرن · دقيقة</span>
  <h2>ما الذي تعلمناه؟</h2>
  <div class="grid g2">
-  <div class="card"><h3>طول القوس</h3><div class="formula">s = <span class="frac"><span>θ</span><span>360°</span></span> × 2πr</div></div>
-  <div class="card"><h3>مساحة القطاع</h3><div class="formula">A = <span class="frac"><span>θ</span><span>360°</span></span> × πr²</div></div>
+  <div class="card"><h3>طول القوس</h3><div class="formula" data-t="l = {θ/360°} × 2πr"></div></div>
+  <div class="card"><h3>مساحة القطاع</h3><div class="formula" data-t="A = {θ/360°} × π r^2"></div></div>
  </div>
- <p class="sub" style="margin-top:18px">الفكرة المشتركة: كلاهما يعتمد مباشرة على النسبة بين الزاوية المركزية و360°.<br>تذكّر دائماً: إطار UDL يمنحك حرية فهم الرياضيات وتطبيقها بطريقتك المفضلة.</p>
- <h1 style="font-size:clamp(28px,5vw,44px)">شكراً لحسن تفاعلكم</h1>
+ <p class="sub" style="margin-top:16px">كلاهما يعتمد مباشرة على النسبة بين الزاوية المركزية و360°. وتذكّر دائماً: إطار UDL يمنحك حرية فهم الرياضيات وتطبيقها بطريقتك المفضلة.</p>
+ <h1 style="font-size:clamp(28px,4.5vw,42px)">شكراً لحسن تفاعلكم</h1>
 </section>
 </main>
-<nav><button class="btn" id="nx" onclick="go(cur+1)">التالي</button><span id="clock">00:00</span><button class="btn" id="pv" onclick="go(cur-1)">السابق</button></nav>
+<nav><button class="btn" id="nx" onclick="go(cur+1)">التالي</button><button class="btn" id="pv" onclick="go(cur-1)">السابق</button></nav></div>
 
 <script>
-const NAMES=[["البداية",0],["الأهداف",1],["التهيئة",2],["طول القوس",4],["القطاع",4],["التطبيق",3],["الخاتمة",1]];
-const secs=[...document.querySelectorAll("section")];let cur=0;
-const st=document.getElementById("steps");
-NAMES.forEach((n,i)=>{const b=document.createElement("button");b.innerHTML=n[0]+(n[1]?"<i>"+n[1]+"د</i>":"");b.onclick=()=>go(i);st.appendChild(b)});
-function go(i){if(i<0||i>=secs.length)return;cur=i;secs.forEach((s,k)=>s.classList.toggle("on",k==i));[...st.children].forEach((b,k)=>b.classList.toggle("on",k==i));document.getElementById("pv").disabled=i==0;document.getElementById("nx").disabled=i==secs.length-1;window.scrollTo(0,0)}
+/* MathML: {a/b} = fraction, x^2 = power, [text] = label */
+function TT(s){return s.replace(/\{([^}\/]+)\/([^}]+)\}|\[([^\]]+)\]|([A-Za-zπθ\d.]+)\^(\d)|(\d+\.?\d*°?)|([=×≈+\-·()])|([A-Za-zπθ])|(\s+)/g,(m,a,b,u,bs,ex,n,op,id)=>{
+ if(a!==undefined)return `<mfrac><mrow>${TT(a)}</mrow><mrow>${TT(b)}</mrow></mfrac>`;
+ if(u!==undefined)return `<mtext>&#160;${u}</mtext>`;
+ if(bs!==undefined)return `<msup><mrow>${TT(bs)}</mrow><mn>${ex}</mn></msup>`;
+ if(n!==undefined)return `<mn>${n}</mn>`;
+ if(op!==undefined)return `<mo>${op}</mo>`;
+ if(id!==undefined)return `<mi>${id}</mi>`;return ""})}
+const T=s=>`<math>${TT(s)}</math>`;
+document.querySelectorAll("[data-t]").forEach(e=>e.innerHTML=T(e.dataset.t));
+
+const NAMES=[["البداية",0],["النتاجات",1],["التهيئة",2],["طول القوس",4],["القطاع",4],["التطبيق",3],["الخاتمة",1]];
+const secs=[...document.querySelectorAll("section")];let cur=0;const st=document.getElementById("steps");
+NAMES.forEach((n,i)=>{const b=document.createElement("button");b.innerHTML="<b></b>"+n[0]+(n[1]?"<i>"+n[1]+"د</i>":"");b.onclick=()=>go(i);st.appendChild(b)});
+function go(i){if(i<0||i>=secs.length)return;cur=i;secs.forEach((s,k)=>s.classList.toggle("on",k==i));[...st.children].forEach((b,k)=>{b.classList.toggle("on",k==i);b.classList.toggle("past",k<i)});pv.disabled=i==0;nx.disabled=i==secs.length-1;window.scrollTo(0,0)}
 addEventListener("keydown",e=>{if(e.target.tagName=="INPUT")return;if(e.key=="ArrowLeft")go(cur+1);if(e.key=="ArrowRight")go(cur-1)});
-let t0=Date.now();setInterval(()=>{const s=Math.floor((Date.now()-t0)/1000);document.getElementById("clock").textContent=String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")},1000);
-document.querySelectorAll("ul.check li").forEach(li=>{li.onclick=()=>li.classList.toggle("done");li.onkeydown=e=>{if(e.key==" "||e.key=="Enter"){e.preventDefault();li.click()}}});
+let t0=Date.now();setInterval(()=>{const s=Math.floor((Date.now()-t0)/1000);clock.textContent=String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")},1000);
 
+/* objectives */
+[["يتعرّف القطاع الدائري من خلال نمذجة بصرية ومجسمة.","شريحة البيتزا أو مروحة اليد: نرى القطاع بأعيننا قبل أن نحسبه."],
+["يستنتج قانون طول القوس في الدائرة.","مسار ركض نصف قطره 30 م، وقوس زاويته 60°: طول ما يقطعه العدّاء 10π ≈ 31.4 م."],
+["يحسب مساحة القطاع الدائري بدقة.","رشاش ماء مداه 6 م يدور 120°: مساحة العشب المروي ≈ 37.7 م²."],
+["يطبّق القوانين على مشكلات حياتية هندسية.","عقرب دقائق طوله 14 سم يمسح في 20 دقيقة مساحة ≈ 205.3 سم²."],
+["يعبّر عن الحل بحرية بالرسم أو بالحساب الجبري.","كما يشرح المهندس فكرته لزميله برسم سريع أو بمعادلة، تختار أنت طريقتك."],
+["يختار مستوى التحدي المناسب له من بين مستويات متعددة.","مثل مستويات الألعاب: تبدأ من الأساسي وتنتقل للمتقدم حين تكون جاهزاً."]].forEach(o=>{
+ const d=document.createElement("div");d.className="card obj";d.tabIndex=0;d.innerHTML=`<h3>${o[0]}</h3><div class="life"><b>مثال حياتي:</b> ${o[1]}</div>`;
+ d.onclick=()=>d.classList.toggle("done");d.onkeydown=e=>{if(e.key=="Enter"||e.key==" "){e.preventDefault();d.click()}};objs.appendChild(d)});
+
+/* drawing */
 const P=(cx,cy,R,th)=>[cx+R*Math.cos(th*Math.PI/180),cy-R*Math.sin(th*Math.PI/180)];
-function draw(cx,cy,R,th,mode){const[x,y]=P(cx,cy,R,th),lg=th>180?1:0;
- let s=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="var(--teal)" stroke-width="3"/>`;
- if(mode!="arc")s+=`<path d="M${cx} ${cy}L${cx+R} ${cy}A${R} ${R} 0 ${lg} 0 ${x} ${y}Z" fill="var(--amber)" fill-opacity=".75"/>`;
- else s+=`<path d="M${cx} ${cy}L${cx+R} ${cy}A${R} ${R} 0 ${lg} 0 ${x} ${y}Z" fill="var(--amber)" fill-opacity=".18"/>`;
+function draw(cx,cy,R,th,mode){const[x,y]=P(cx,cy,R,th),lg=th>180?1:0,[tx,ty]=P(cx,cy,26,th/2),[lx,ly]=P(cx,cy,R+16,th/2),[ax,ay]=P(cx,cy,R*.62,th/2);
+ const tx_=(X,Y,t,c)=>`<text x="${X}" y="${Y}" fill="${c}" font-size="17" font-weight="700" text-anchor="middle" dominant-baseline="middle" font-family="serif" font-style="italic">${t}</text>`;
+ let s=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="var(--vio)" stroke-width="3"/><path d="M${cx} ${cy}L${cx+R} ${cy}A${R} ${R} 0 ${lg} 0 ${x} ${y}Z" fill="var(--org)" fill-opacity="${mode=="arc"?.15:.7}"/>`;
  s+=`<line x1="${cx}" y1="${cy}" x2="${cx+R}" y2="${cy}" stroke="var(--ink)" stroke-width="2"/><line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="var(--ink)" stroke-width="2"/>`;
- if(mode=="arc")s+=`<path d="M${cx+R} ${cy}A${R} ${R} 0 ${lg} 0 ${x} ${y}" fill="none" stroke="var(--amber)" stroke-width="8" stroke-linecap="round"/>`;
+ if(mode=="arc")s+=`<path d="M${cx+R} ${cy}A${R} ${R} 0 ${lg} 0 ${x} ${y}" fill="none" stroke="var(--org)" stroke-width="8" stroke-linecap="round"/>`+tx_(lx,ly,"l","var(--org)");
+ if(mode=="sec")s+=tx_(ax,ay,"A","var(--ink)");
+ if(mode)s+=tx_(cx+R/2,cy+15,"r","var(--vio)")+tx_(tx,ty,"θ","var(--ink)");
  return s+`<circle cx="${cx}" cy="${cy}" r="4" fill="var(--ink)"/>`}
-document.getElementById("heroSvg").innerHTML=draw(130,130,105,120,"sec");
+const hs=document.getElementById("heroSvg");let h0=null;
+(function f(t){h0=h0||t;const k=Math.min((t-h0)/1400,1),th=Math.max(1,120*(1-Math.pow(1-k,3)));hs.innerHTML=draw(130,130,105,th,"");if(k<1)requestAnimationFrame(f)})(performance.now());
 
-function mini(k){const c=40,R=32;let s=`<svg viewBox="0 0 80 80" width="90">`;
- if(k==0)s+=`<circle cx="40" cy="40" r="32" fill="none" stroke="var(--line)" stroke-width="7"/><path d="M72 40A32 32 0 0 0 40 8" fill="none" stroke="var(--amber)" stroke-width="7" stroke-linecap="round"/>`;
- if(k==1){s+=`<circle cx="40" cy="40" r="32" fill="var(--card)" stroke="var(--teal)" stroke-width="3"/><path d="M40 40L40 8A32 32 0 0 1 72 40Z" fill="var(--amber)" fill-opacity=".7"/><line x1="40" y1="40" x2="72" y2="40" stroke="var(--ink)" stroke-width="3"/><line x1="40" y1="40" x2="40" y2="8" stroke="var(--ink)" stroke-width="3"/>`}
- if(k==2)s+=`<circle cx="40" cy="40" r="32" fill="var(--ambersoft)" stroke="var(--teal)" stroke-width="3"/><path d="M40 40L72 40A32 32 0 0 0 57 12Z" fill="var(--amber)"/>`;
+/* hook */
+function mini(k){let s=`<svg viewBox="0 0 80 80" width="90">`;
+ if(k==0)s+=`<circle cx="40" cy="40" r="32" fill="none" stroke="var(--line)" stroke-width="7"/><path d="M72 40A32 32 0 0 0 40 8" fill="none" stroke="var(--org)" stroke-width="7" stroke-linecap="round"/>`;
+ if(k==1)s+=`<circle cx="40" cy="40" r="32" fill="var(--card)" stroke="var(--vio)" stroke-width="3"/><path d="M40 40L40 8A32 32 0 0 1 72 40Z" fill="var(--org)" fill-opacity=".7"/><path d="M40 40L40 8M40 40L72 40" stroke="var(--ink)" stroke-width="3"/>`;
+ if(k==2)s+=`<circle cx="40" cy="40" r="32" fill="var(--orgsoft)" stroke="var(--vio)" stroke-width="3"/><path d="M40 40L72 40A32 32 0 0 0 57 12Z" fill="var(--org)"/>`;
  return s+"</svg>"}
 [["أضواء المسار الدائري","تصميم حدائق أو مسارات ركض دائرية يعتمد كلياً على حساب الأقواس."],["حركة عقارب الساعة","المسافة التي يقطعها رأس عقرب الدقائق تشكل طول قوس بانتظام."],["شريحة بيتزا دائرية","تقسيم البيتزا يمثل قطاعاً دائرياً وقوساً محدداً بزاوية مركزية."]].forEach((h,i)=>{
  const d=document.createElement("div");d.className="card";d.style.cursor="pointer";d.tabIndex=0;
  d.innerHTML=`<div style="text-align:center">${mini(i)}</div><h3>${h[0]}</h3><p class="note" style="display:none;margin:0;font-size:17px;color:var(--ink)">${h[1]}</p>`;
  d.onclick=()=>{const p=d.querySelector("p");p.style.display=p.style.display=="none"?"block":"none"};
- d.onkeydown=e=>{if(e.key=="Enter"||e.key==" "){e.preventDefault();d.click()}};
- document.getElementById("hook").appendChild(d)});
+ d.onkeydown=e=>{if(e.key=="Enter"||e.key==" "){e.preventDefault();d.click()}};hook.appendChild(d)});
 
-function lab(id,mode){const el=document.getElementById(id);
+/* labs */
+function lab(id,mode,presets){const el=document.getElementById(id);let u=["وحدة","وحدة²"];
  el.innerHTML=`<svg viewBox="0 0 260 260"></svg><div class="ctrl">
- <label><span>الزاوية المركزية θ</span><span dir="ltr"><b class="tv">90</b>°</span></label><input type="range" min="10" max="350" step="5" value="90" class="ti">
- <label><span>نصف القطر r</span><span dir="ltr"><b class="rv">7</b> cm</span></label><input type="range" min="2" max="10" step="1" value="7" class="ri">
- ${mode=="arc"?'<div class="note" style="margin-top:12px">المحيط كاملاً مفروداً، والجزء الملوّن هو القوس:</div><div class="bar"><div></div></div>':""}
- <div class="out"></div>${mode=="sec"?'<div class="note" style="margin-top:6px;text-align:center" dir="ltr"></div>':""}</div>`;
- const svg=el.querySelector("svg"),ti=el.querySelector(".ti"),ri=el.querySelector(".ri");
- function upd(){const th=+ti.value,r=+ri.value,R=r*11+20;el.querySelector(".tv").textContent=th;el.querySelector(".rv").textContent=r;
-  svg.innerHTML=draw(130,130,R,th,mode);const f=th/360;
-  if(mode=="arc"){el.querySelector(".bar div").style.width=f*100+"%";
-   el.querySelector(".out").textContent=`s = ${th}/360 × 2π × ${r} ≈ ${(f*2*Math.PI*r).toFixed(2)} cm`}
-  else{const A=f*Math.PI*r*r,s=f*2*Math.PI*r;
-   el.querySelector(".out").textContent=`A = ${th}/360 × π × ${r}² ≈ ${A.toFixed(2)} cm²`;
-   el.querySelector(".note:last-child").textContent=`½ · s · r = ½ × ${s.toFixed(2)} × ${r} = ${(s*r/2).toFixed(2)} cm²`}}
+ <label><span>الزاوية المركزية θ</span><span dir="ltr"><b class="tv"></b>°</span></label><input type="range" min="10" max="350" step="5" value="90" class="ti">
+ <label><span>نصف القطر r</span><span dir="ltr"><b class="rv"></b></span></label><input type="range" min="2" max="30" step="1" value="10" class="ri">
+ <div class="chips"></div>
+ ${mode=="arc"?'<div class="note">المحيط كاملاً مفروداً، والجزء البرتقالي هو القوس l:</div><div class="bar"><div></div></div>':""}
+ <div class="out"></div>${mode=="sec"?'<div class="out" style="margin-top:6px"></div>':""}</div>`;
+ const svg=el.querySelector("svg"),ti=el.querySelector(".ti"),ri=el.querySelector(".ri"),outs=el.querySelectorAll(".out");
+ function upd(){const th=+ti.value,r=+ri.value,R=r*3+20,f=th/360,l=f*2*Math.PI*r,A=f*Math.PI*r*r;
+  el.querySelector(".tv").textContent=th;el.querySelector(".rv").textContent=r+" "+u[0];svg.innerHTML=draw(130,130,R,th,mode);
+  if(mode=="arc"){el.querySelector(".bar div").style.width=f*100+"%";outs[0].innerHTML=T(`l = {${th}/360} × 2 × π × ${r} ≈ ${l.toFixed(2)} [${u[0]}]`)}
+  else{outs[0].innerHTML=T(`A = {${th}/360} × π × ${r}^2 ≈ ${A.toFixed(2)} [${u[1]}]`);outs[1].innerHTML=T(`{1/2} × l × r = {1/2} × ${l.toFixed(2)} × ${r} = ${(l*r/2).toFixed(2)} [${u[1]}]`)}}
+ presets.forEach(p=>{const c=document.createElement("button");c.className="chip"+(p[4]?" hot":"");c.textContent=p[0];c.onclick=()=>{ti.value=p[1];ri.value=p[2];u=p[3];upd()};el.querySelector(".chips").appendChild(c)});
  ti.oninput=ri.oninput=upd;upd()}
-lab("labArc","arc");lab("labSec","sec");
+const gen=["وحدة","وحدة²"],m=["م","م²"];
+lab("labArc","arc",[["ربع دائرة",90,10,gen],["نصف دائرة",180,10,gen],["مثال: مسار الركض",60,30,m,1]]);
+lab("labSec","sec",[["ربع دائرة",90,10,gen],["ثلث دائرة",120,10,gen],["مثال: رشاش الحديقة",120,6,m,1]]);
 
+/* practice */
 const TASKS=[
-["المستوى الأساسي","دائرة نصف قطرها 7 سم، وزاويتها المركزية 90°. أجد طول القوس ومساحة القطاع.","s = (90/360) × 2π × 7 = 3.5π ≈ 11 cm<br>A = (90/360) × π × 7² = 12.25π ≈ 38.5 cm²"],
-["المستوى المتقدم","ساعة جدارية طول عقرب الدقائق فيها 14 سم. ما المساحة التي يمسحها العقرب في 20 دقيقة؟","20 دقيقة = 20/60 من الدورة، فالزاوية θ = 120°<br>A = (120/360) × π × 14² = 196π/3 ≈ 205.3 cm²"],
-["التعبير البديل","اشرح خطوات الحل شفهياً لزميلك، أو استخدم الرسم التوضيحي، أو اكتب الخطوات حسابياً.","اختر إحدى المسألتين السابقتين واعرض حلّها بالطريقة التي تفضلها: شرح شفهي، رسم للقطاع، أو خطوات جبرية."]];
-const tabs=document.getElementById("tabs"),task=document.getElementById("task");
-TASKS.forEach((t,i)=>{const b=document.createElement("button");b.textContent=t[0];b.onclick=()=>{[...tabs.children].forEach(x=>x.classList.remove("on"));b.classList.add("on");
- task.innerHTML=`<h3>${t[0]}</h3><p style="margin:0">${t[1]}</p><button class="btn" style="margin-top:12px" id="rv">أظهر الحل / الإرشاد</button><div class="sol" dir="rtl">${t[2]}</div>`;
- task.querySelector("#rv").onclick=()=>task.querySelector(".sol").classList.toggle("on")};tabs.appendChild(b)});
+{n:"المستوى الأساسي",q:"دائرة نصف قطرها 7 سم، وزاويتها المركزية 90°. أجد طول القوس ومساحة القطاع.",
+ parts:[["طول القوس l (سم)",11,.2],["مساحة القطاع A (سم²)",38.5,.2]],
+ hints:["حدّد المعطيات: r = 7 و θ = 90°.","90° من 360° تمثل ربع الدائرة: {90/360} = {1/4}.","عوّض في قانون طول القوس، ثم في قانون مساحة القطاع (الخطوة التالية في الصفحتين السابقتين)."],
+ steps:["l = {90/360} × 2 × π × 7","l = {1/4} × 14π = 3.5π ≈ 11 [سم]","A = {90/360} × π × 7^2","A = {1/4} × 49π = 12.25π ≈ 38.5 [سم²]"]},
+{n:"المستوى المتقدم",q:"ساعة جدارية طول عقرب الدقائق فيها 14 سم. ما المساحة التي يمسحها العقرب في 20 دقيقة؟",
+ parts:[["الزاوية θ (°)",120,.5],["المساحة A (سم²)",205.3,.6]],
+ hints:["العقرب هو نصف القطر: r = 14 سم.","الدورة الكاملة 60 دقيقة = 360°. أي جزء من الدورة تمثله 20 دقيقة؟","المساحة المطلوبة مساحة قطاع زاويته المركزية الناتجة عن الخطوة السابقة."],
+ steps:["θ = {20/60} × 360° = 120°","A = {120/360} × π × 14^2","A = {1/3} × 196π = {196π/3} ≈ 205.3 [سم²]"]},
+{n:"التعبير البديل",q:"اختر إحدى المسألتين السابقتين واعرض حلّها بالطريقة التي تفضلها: شرح شفهي لزميلك، أو رسم توضيحي، أو خطوات حسابية.",parts:[],
+ hints:["ارسم دائرة وظلّل القطاع، ثم اكتب r وθ على الرسم.","اشرح بجملة: القوس هو الجزء θ من 360 من المحيط.","اختر لغتك: كلمات، رسم، أو معادلات. كلها مقبولة."],steps:[]}];
+const num=v=>parseFloat(String(v).replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace("٫",".").replace(",","."));
+TASKS.forEach((t,i)=>{const b=document.createElement("button");b.className="btn";b.textContent=t.n;b.onclick=()=>{[...tabs.children].forEach(x=>x.classList.remove("on"));b.classList.add("on");show(t)};tabs.appendChild(b)});
+function show(t){let hi=0,si=0;
+ task.innerHTML=`<h3>${t.n}</h3><p style="margin:0">${t.q}</p>`+t.parts.map((p,i)=>`<div class="row"><span>${p[0]}:</span><input class="ans" inputmode="decimal" data-i="${i}"><span class="fb"></span></div>`).join("")+
+ `<div class="acts">${t.parts.length?'<button class="btn pri" id="ck">تحقق</button>':""}<button class="btn" id="hb">تلميح</button>${t.steps.length?'<button class="btn" id="sb">الحل خطوة خطوة</button>':""}</div><div id="hl"></div><div id="sl"></div>`;
+ const ck=task.querySelector("#ck");
+ if(ck)ck.onclick=()=>task.querySelectorAll(".ans").forEach(a=>{const p=t.parts[a.dataset.i],v=num(a.value),fb=a.parentNode.querySelector(".fb");
+  const ok=!isNaN(v)&&Math.abs(v-p[1])<=p[2];fb.className="fb "+(ok?"ok":"bad");fb.textContent=a.value.trim()==""?"":ok?"✓ إجابة صحيحة":"✗ حاول مرة أخرى، أو اطلب تلميحاً"});
+ task.querySelector("#hb").onclick=e=>{if(hi<t.hints.length){const d=document.createElement("div");d.className="hint";d.innerHTML=`<b>تلميح ${hi+1}:</b> `+t.hints[hi].replace(/\{[^}]+\}(?:\s*[×=][^.،]*)?|[A-Za-zπθ]\^\d/g,x=>T(x));hl.appendChild(d);hi++}if(hi>=t.hints.length){e.target.disabled=true;e.target.textContent="انتهت التلميحات"}};
+ const sb=task.querySelector("#sb");if(sb)sb.onclick=()=>{if(si<t.steps.length){const d=document.createElement("div");d.className="step";d.innerHTML=T(t.steps[si]);sl.appendChild(d);si++}if(si>=t.steps.length){sb.disabled=true;sb.textContent="اكتمل الحل"}}}
 tabs.firstChild.click();go(0);
 </script>
 </body>
