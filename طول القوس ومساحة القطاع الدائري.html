@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>طول القوس ومساحة القطاع الدائري</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2f7f7;--card:#fff;--ink:#10262b;--mute:#4d6a70;--line:#cfe0e2;--teal:#0f766e;--tealsoft:#d5efec;--amber:#f0a92e;--ambersoft:#fdeccb;--ok:#15803d;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1a1d;--card:#15272b;--ink:#e6f1f2;--mute:#9db8bc;--line:#264247;--teal:#3cc4b6;--tealsoft:#123c3a;--amber:#f5b94a;--ambersoft:#3d2f12;--ok:#4ade80}}
+:root[data-theme="dark"]{--bg:#0d1a1d;--card:#15272b;--ink:#e6f1f2;--mute:#9db8bc;--line:#264247;--teal:#3cc4b6;--tealsoft:#123c3a;--amber:#f5b94a;--ambersoft:#3d2f12;--ok:#4ade80}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Tajawal,"Segoe UI",Tahoma,sans-serif;font-size:18px;line-height:1.6}
+body{min-height:100vh;display:flex;flex-direction:column}
+header{display:flex;align-items:center;gap:14px;padding:12px 24px;border-bottom:1px solid var(--line);background:var(--card)}
+header b{font-weight:800;font-size:17px}
+.steps{display:flex;gap:6px;flex:1;flex-wrap:wrap}
+.steps button{border:1px solid var(--line);background:var(--bg);color:var(--mute);border-radius:99px;padding:3px 12px;font:inherit;font-size:14px;cursor:pointer}
+.steps button.on{background:var(--teal);border-color:var(--teal);color:#fff;font-weight:700}
+.steps button i{font-style:normal;opacity:.75;margin-inline-start:5px}
+main{flex:1;width:100%;max-width:1100px;margin:0 auto;padding:26px 22px}
+section{display:none}section.on{display:block}
+h1{font-size:clamp(34px,6vw,60px);line-height:1.15;margin:0 0 14px;font-weight:800}
+h2{font-size:clamp(26px,4vw,38px);margin:0 0 6px;font-weight:800}
+.sub{color:var(--mute);margin:0 0 20px;max-width:62ch}
+.grid{display:grid;gap:16px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}
+@media(max-width:820px){.g2,.g3{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+.card h3{margin:0 0 6px;font-size:20px}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:center}
+@media(max-width:820px){.hero{grid-template-columns:1fr}}
+.tag{display:inline-block;background:var(--ambersoft);color:var(--ink);border-radius:8px;padding:2px 12px;font-weight:700;font-size:15px;margin-bottom:12px}
+ul.check{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+ul.check li{display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;user-select:none}
+ul.check li::before{content:"";flex:none;width:22px;height:22px;margin-top:3px;border:2px solid var(--teal);border-radius:6px}
+ul.check li.done{background:var(--tealsoft)}
+ul.check li.done::before{background:var(--teal);box-shadow:inset 0 0 0 4px var(--tealsoft)}
+.formula{direction:ltr;text-align:center;font-size:26px;font-weight:700;background:var(--tealsoft);border-radius:12px;padding:12px 8px;margin:12px 0;font-family:"Times New Roman",serif}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.15;margin:0 4px}
+.frac span:first-child{border-bottom:2px solid currentColor;padding:0 4px}
+.lab{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+.lab svg{flex:0 0 300px;max-width:100%;height:auto}
+.ctrl{flex:1;min-width:250px}
+.ctrl label{display:flex;justify-content:space-between;font-weight:700;margin-top:10px}
+input[type=range]{width:100%;accent-color:var(--teal)}
+.bar{height:26px;border-radius:8px;background:var(--tealsoft);overflow:hidden;direction:ltr;margin:8px 0 2px;border:1px solid var(--line)}
+.bar div{height:100%;background:var(--amber)}
+.out{font-size:22px;font-weight:800;color:var(--teal);direction:ltr;text-align:center;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px;margin-top:10px}
+.note{font-size:15px;color:var(--mute)}
+.tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.tabs button,.btn{font:inherit;font-weight:700;border:2px solid var(--teal);background:var(--card);color:var(--ink);border-radius:12px;padding:8px 18px;cursor:pointer}
+.tabs button.on,.btn.pri{background:var(--teal);color:#fff}
+.sol{display:none;margin-top:12px;background:var(--tealsoft);border-radius:10px;padding:12px 14px}
+.sol.on{display:block}
+nav{display:flex;justify-content:space-between;align-items:center;padding:12px 24px;border-top:1px solid var(--line);background:var(--card)}
+nav .btn:disabled{opacity:.35;cursor:default}
+#clock{font-variant-numeric:tabular-nums;font-weight:700;color:var(--mute)}
+button:focus-visible,li:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+</style>
+</head>
+<body>
+<header><b>طول القوس ومساحة القطاع</b><div class="steps" id="steps"></div></header>
+<main>
+
+<section class="on">
+ <div class="hero"><div>
+  <span class="tag">الصف العاشر الأساسي · درس مصغر (10–15 دقيقة)</span>
+  <h1>طول القوس ومساحة القطاع الدائري</h1>
+  <p class="sub">نستكشف المفاهيم الهندسية بطرق مرنة وتفاعلية تناسب جميع المتعلمين: نشاهد، نجرّب، ثم نعبّر بطريقتنا.</p>
+  <button class="btn pri" onclick="go(1)">ابدأ الدرس</button>
+ </div><svg viewBox="0 0 260 260" id="heroSvg"></svg></div>
+</section>
+
+<section>
+ <h2>بطاقة الدرس والأهداف المرنة</h2>
+ <p class="sub">اضغط على الناتج عندما نحققه معاً خلال الحصة.</p>
+ <div class="grid g2">
+  <div><h3>المخرجات التعليمية المتوقعة</h3>
+   <ul class="check">
+    <li tabindex="0">توفير نمذجة بصرية ومجسمة للقطاع.</li>
+    <li tabindex="0">استنتاج قانون طول القوس في الدائرة.</li>
+    <li tabindex="0">حساب مساحة القطاع الدائري بدقة.</li>
+    <li tabindex="0">تطبيق القوانين على مشكلات حياتية هندسية.</li>
+   </ul></div>
+  <div><h3>مرونة إطار UDL</h3>
+   <ul class="check">
+    <li tabindex="0">حرية التعبير بالرسم أو بالحساب الجبري.</li>
+    <li tabindex="0">مستويات تحدٍّ تناسب الفروق الفردية.</li>
+   </ul></div>
+ </div>
+</section>
+
+<section>
+ <span class="tag">دقيقتان</span>
+ <h2>التهيئة والتحفيز</h2>
+ <p class="sub">أين نرى الأقواس والقطاعات حولنا؟ اضغط على كل بطاقة.</p>
+ <div class="grid g3" id="hook"></div>
+</section>
+
+<section>
+ <span class="tag">4 دقائق</span>
+ <h2>استكشاف طول القوس</h2>
+ <p class="sub">القوس جزء من محيط الدائرة. حرّك الزاوية وانظر كيف يتغير طول القوس فوراً.</p>
+ <div class="lab" id="labArc"></div>
+ <div class="grid g2" style="margin-top:16px">
+  <div class="card"><h3>الفكرة الأساسية</h3>
+   نسبة طول القوس إلى المحيط تساوي نسبة زاويته المركزية إلى 360°.
+   <div class="formula">s = <span class="frac"><span>θ</span><span>360°</span></span> × 2πr</div></div>
+  <div class="card"><h3>دعم المتعلمين</h3>
+   <p style="margin:0 0 6px">مسرد مرئي للمصطلحات:</p>
+   <b style="color:var(--teal)">نصف القطر r</b> · <b style="color:var(--amber)">الزاوية المركزية θ</b> · <b>المحيط 2πr</b><br>
+   <span class="note">يمكن تنفيذ النشاط نفسه على GeoGebra.</span></div>
+ </div>
+</section>
+
+<section>
+ <span class="tag">4 دقائق</span>
+ <h2>استكشاف مساحة القطاع الدائري</h2>
+ <p class="sub">مساحة القطاع جزء من مساحة الدائرة، وتعتمد على الزاوية المركزية المقابلة له.</p>
+ <div class="lab" id="labSec"></div>
+ <div class="grid g2" style="margin-top:16px">
+  <div class="card"><h3>القاعدة</h3>
+   <div class="formula">A = <span class="frac"><span>θ</span><span>360°</span></span> × πr²</div></div>
+  <div class="card"><h3>تلميح للفهم العميق</h3>
+   يمكن حساب المساحة مباشرة بدلالة طول القوس s ونصف القطر r:
+   <div class="formula">A = ½ · s · r</div>
+   <span class="note">جرّب: القيمتان في المختبر أعلاه متطابقتان دائماً.</span></div>
+ </div>
+</section>
+
+<section>
+ <span class="tag">تطبيق عملي · خيارات الطلاب</span>
+ <h2>اختر مستوى التحدي</h2>
+ <p class="sub">اختر المستوى أو طريقة التعبير التي تناسبك لتثبت فهمك.</p>
+ <div class="tabs" id="tabs"></div>
+ <div class="card" id="task"></div>
+</section>
+
+<section>
+ <span class="tag">خاتمة الدرس والتقييم الختامي المرن</span>
+ <h2>ما الذي تعلمناه؟</h2>
+ <div class="grid g2">
+  <div class="card"><h3>طول القوس</h3><div class="formula">s = <span class="frac"><span>θ</span><span>360°</span></span> × 2πr</div></div>
+  <div class="card"><h3>مساحة القطاع</h3><div class="formula">A = <span class="frac"><span>θ</span><span>360°</span></span> × πr²</div></div>
+ </div>
+ <p class="sub" style="margin-top:18px">الفكرة المشتركة: كلاهما يعتمد مباشرة على النسبة بين الزاوية المركزية و360°.<br>تذكّر دائماً: إطار UDL يمنحك حرية فهم الرياضيات وتطبيقها بطريقتك المفضلة.</p>
+ <h1 style="font-size:clamp(28px,5vw,44px)">شكراً لحسن تفاعلكم</h1>
+</section>
+</main>
+<nav><button class="btn" id="nx" onclick="go(cur+1)">التالي</button><span id="clock">00:00</span><button class="btn" id="pv" onclick="go(cur-1)">السابق</button></nav>
+
+<script>
+const NAMES=[["البداية",0],["الأهداف",1],["التهيئة",2],["طول القوس",4],["القطاع",4],["التطبيق",3],["الخاتمة",1]];
+const secs=[...document.querySelectorAll("section")];let cur=0;
+const st=document.getElementById("steps");
+NAMES.forEach((n,i)=>{const b=document.createElement("button");b.innerHTML=n[0]+(n[1]?"<i>"+n[1]+"د</i>":"");b.onclick=()=>go(i);st.appendChild(b)});
+function go(i){if(i<0||i>=secs.length)return;cur=i;secs.forEach((s,k)=>s.classList.toggle("on",k==i));[...st.children].forEach((b,k)=>b.classList.toggle("on",k==i));document.getElementById("pv").disabled=i==0;document.getElementById("nx").disabled=i==secs.length-1;window.scrollTo(0,0)}
+addEventListener("keydown",e=>{if(e.target.tagName=="INPUT")return;if(e.key=="ArrowLeft")go(cur+1);if(e.key=="ArrowRight")go(cur-1)});
+let t0=Date.now();setInterval(()=>{const s=Math.floor((Date.now()-t0)/1000);document.getElementById("clock").textContent=String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")},1000);
+document.querySelectorAll("ul.check li").forEach(li=>{li.onclick=()=>li.classList.toggle("done");li.onkeydown=e=>{if(e.key==" "||e.key=="Enter"){e.preventDefault();li.click()}}});
+
+const P=(cx,cy,R,th)=>[cx+R*Math.cos(th*Math.PI/180),cy-R*Math.sin(th*Math.PI/180)];
+function draw(cx,cy,R,th,mode){const[x,y]=P(cx,cy,R,th),lg=th>180?1:0;
+ let s=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="var(--teal)" stroke-width="3"/>`;
+ if(mode!="arc")s+=`<path d="M${cx} ${cy}L${cx+R} ${cy}A${R} ${R} 0 ${lg} 0 ${x} ${y}Z" fill="var(--amber)" fill-opacity=".75"/>`;
+ else s+=`<path d="M${cx} ${cy}L${cx+R} ${cy}A${R} ${R} 0 ${lg} 0 ${x} ${y}Z" fill="var(--amber)" fill-opacity=".18"/>`;
+ s+=`<line x1="${cx}" y1="${cy}" x2="${cx+R}" y2="${cy}" stroke="var(--ink)" stroke-width="2"/><line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="var(--ink)" stroke-width="2"/>`;
+ if(mode=="arc")s+=`<path d="M${cx+R} ${cy}A${R} ${R} 0 ${lg} 0 ${x} ${y}" fill="none" stroke="var(--amber)" stroke-width="8" stroke-linecap="round"/>`;
+ return s+`<circle cx="${cx}" cy="${cy}" r="4" fill="var(--ink)"/>`}
+document.getElementById("heroSvg").innerHTML=draw(130,130,105,120,"sec");
+
+function mini(k){const c=40,R=32;let s=`<svg viewBox="0 0 80 80" width="90">`;
+ if(k==0)s+=`<circle cx="40" cy="40" r="32" fill="none" stroke="var(--line)" stroke-width="7"/><path d="M72 40A32 32 0 0 0 40 8" fill="none" stroke="var(--amber)" stroke-width="7" stroke-linecap="round"/>`;
+ if(k==1){s+=`<circle cx="40" cy="40" r="32" fill="var(--card)" stroke="var(--teal)" stroke-width="3"/><path d="M40 40L40 8A32 32 0 0 1 72 40Z" fill="var(--amber)" fill-opacity=".7"/><line x1="40" y1="40" x2="72" y2="40" stroke="var(--ink)" stroke-width="3"/><line x1="40" y1="40" x2="40" y2="8" stroke="var(--ink)" stroke-width="3"/>`}
+ if(k==2)s+=`<circle cx="40" cy="40" r="32" fill="var(--ambersoft)" stroke="var(--teal)" stroke-width="3"/><path d="M40 40L72 40A32 32 0 0 0 57 12Z" fill="var(--amber)"/>`;
+ return s+"</svg>"}
+[["أضواء المسار الدائري","تصميم حدائق أو مسارات ركض دائرية يعتمد كلياً على حساب الأقواس."],["حركة عقارب الساعة","المسافة التي يقطعها رأس عقرب الدقائق تشكل طول قوس بانتظام."],["شريحة بيتزا دائرية","تقسيم البيتزا يمثل قطاعاً دائرياً وقوساً محدداً بزاوية مركزية."]].forEach((h,i)=>{
+ const d=document.createElement("div");d.className="card";d.style.cursor="pointer";d.tabIndex=0;
+ d.innerHTML=`<div style="text-align:center">${mini(i)}</div><h3>${h[0]}</h3><p class="note" style="display:none;margin:0;font-size:17px;color:var(--ink)">${h[1]}</p>`;
+ d.onclick=()=>{const p=d.querySelector("p");p.style.display=p.style.display=="none"?"block":"none"};
+ d.onkeydown=e=>{if(e.key=="Enter"||e.key==" "){e.preventDefault();d.click()}};
+ document.getElementById("hook").appendChild(d)});
+
+function lab(id,mode){const el=document.getElementById(id);
+ el.innerHTML=`<svg viewBox="0 0 260 260"></svg><div class="ctrl">
+ <label><span>الزاوية المركزية θ</span><span dir="ltr"><b class="tv">90</b>°</span></label><input type="range" min="10" max="350" step="5" value="90" class="ti">
+ <label><span>نصف القطر r</span><span dir="ltr"><b class="rv">7</b> cm</span></label><input type="range" min="2" max="10" step="1" value="7" class="ri">
+ ${mode=="arc"?'<div class="note" style="margin-top:12px">المحيط كاملاً مفروداً، والجزء الملوّن هو القوس:</div><div class="bar"><div></div></div>':""}
+ <div class="out"></div>${mode=="sec"?'<div class="note" style="margin-top:6px;text-align:center" dir="ltr"></div>':""}</div>`;
+ const svg=el.querySelector("svg"),ti=el.querySelector(".ti"),ri=el.querySelector(".ri");
+ function upd(){const th=+ti.value,r=+ri.value,R=r*11+20;el.querySelector(".tv").textContent=th;el.querySelector(".rv").textContent=r;
+  svg.innerHTML=draw(130,130,R,th,mode);const f=th/360;
+  if(mode=="arc"){el.querySelector(".bar div").style.width=f*100+"%";
+   el.querySelector(".out").textContent=`s = ${th}/360 × 2π × ${r} ≈ ${(f*2*Math.PI*r).toFixed(2)} cm`}
+  else{const A=f*Math.PI*r*r,s=f*2*Math.PI*r;
+   el.querySelector(".out").textContent=`A = ${th}/360 × π × ${r}² ≈ ${A.toFixed(2)} cm²`;
+   el.querySelector(".note:last-child").textContent=`½ · s · r = ½ × ${s.toFixed(2)} × ${r} = ${(s*r/2).toFixed(2)} cm²`}}
+ ti.oninput=ri.oninput=upd;upd()}
+lab("labArc","arc");lab("labSec","sec");
+
+const TASKS=[
+["المستوى الأساسي","دائرة نصف قطرها 7 سم، وزاويتها المركزية 90°. أجد طول القوس ومساحة القطاع.","s = (90/360) × 2π × 7 = 3.5π ≈ 11 cm<br>A = (90/360) × π × 7² = 12.25π ≈ 38.5 cm²"],
+["المستوى المتقدم","ساعة جدارية طول عقرب الدقائق فيها 14 سم. ما المساحة التي يمسحها العقرب في 20 دقيقة؟","20 دقيقة = 20/60 من الدورة، فالزاوية θ = 120°<br>A = (120/360) × π × 14² = 196π/3 ≈ 205.3 cm²"],
+["التعبير البديل","اشرح خطوات الحل شفهياً لزميلك، أو استخدم الرسم التوضيحي، أو اكتب الخطوات حسابياً.","اختر إحدى المسألتين السابقتين واعرض حلّها بالطريقة التي تفضلها: شرح شفهي، رسم للقطاع، أو خطوات جبرية."]];
+const tabs=document.getElementById("tabs"),task=document.getElementById("task");
+TASKS.forEach((t,i)=>{const b=document.createElement("button");b.textContent=t[0];b.onclick=()=>{[...tabs.children].forEach(x=>x.classList.remove("on"));b.classList.add("on");
+ task.innerHTML=`<h3>${t[0]}</h3><p style="margin:0">${t[1]}</p><button class="btn" style="margin-top:12px" id="rv">أظهر الحل / الإرشاد</button><div class="sol" dir="rtl">${t[2]}</div>`;
+ task.querySelector("#rv").onclick=()=>task.querySelector(".sol").classList.toggle("on")};tabs.appendChild(b)});
+tabs.firstChild.click();go(0);
+</script>
+</body>
+</html>
